@@ -33,6 +33,11 @@ interface EventStore
     public function loadFromPlayhead($id, int $playhead): DomainEventStream;
 
     /**
+     * @param mixed $id
+     */
+    public function loadFromPlayheadToPlayhead($id, int $fromPlayhead, int $toPlayhead): DomainEventStream;
+
+    /**
      * @param mixed             $id
      * @param DomainEventStream $eventStream
      *
