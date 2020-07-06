@@ -85,6 +85,19 @@ class EventSourcingRepository implements Repository
         $this->eventBus->publish($eventStream);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    public function replay($id, int $fromPlayhead, ?int $toPlayhead = null): void
+    {
+        $domainEventStream = $toPlayhead
+            ? $this->eventStore->loadFromPlayheadToPlayhead($id, $fromPlayhead, $toPlayhead)
+            : $this->eventStore->loadFromPlayhead($id, $fromPlayhead)
+        ;
+
+        $this->eventBus->publish($domainEventStream);
+    }
+
     private function decorateForWrite(AggregateRoot $aggregate, DomainEventStream $eventStream): DomainEventStream
     {
         $aggregateType = get_class($aggregate);
